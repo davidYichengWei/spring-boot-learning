@@ -1,12 +1,15 @@
 package com.rest.springboot.restfulspringboot.user;
 
+import java.net.URI;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 public class UserResource {
@@ -31,7 +34,13 @@ public class UserResource {
 	
 	// Create a user
 	@PostMapping("/users")
-	public void createUser(@RequestBody User user) { // User will be the body of the request
-		service.createUser(user);
+	public ResponseEntity<User> createUser(@RequestBody User user) { // User will be the body of the request
+		User newUser = service.createUser(user);
+		
+		// Return the URI of the user with 201 status code
+		URI location = ServletUriComponentsBuilder
+				.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(newUser.getId()).toUri();
+		return ResponseEntity.created(location).build(); // Build the response entity
 	}
 }
