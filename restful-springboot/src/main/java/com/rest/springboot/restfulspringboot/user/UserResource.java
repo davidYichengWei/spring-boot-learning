@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import jakarta.validation.Valid;
+
 @RestController
 public class UserResource {
 	
@@ -41,7 +43,8 @@ public class UserResource {
 	
 	// Create a user
 	@PostMapping("/users")
-	public ResponseEntity<User> createUser(@RequestBody User user) { // User will be the body of the request
+	// With @Valid, whenever binding happens, the validations defined in the object get invoked
+	public ResponseEntity<User> createUser(@Valid @RequestBody User user) { // User will be the body of the request
 		User newUser = service.createUser(user);
 		
 		// Return the URI of the user with 201 status code
