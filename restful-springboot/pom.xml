@@ -46,6 +46,7 @@
 			<scope>test</scope>
 		</dependency>
 		
+		<!--
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
@@ -56,6 +57,7 @@
 			<groupId>com.fasterxml.jackson.dataformat</groupId>
 			<artifactId>jackson-dataformat-xml</artifactId>
 		</dependency>
+		-->
 		
 	</dependencies>
 
