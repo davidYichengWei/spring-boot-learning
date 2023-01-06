@@ -20,7 +20,7 @@ public class Post {
 	// By default, ManyToOne query would also fetch the user
 	// LAZY FetchType prevents it from doing so
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JsonIgnore
+	@JsonIgnore // Ignore it in the reponse when returning a Post object
 	private User user;
 
 	public Integer getId() {

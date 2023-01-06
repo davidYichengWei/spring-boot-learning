@@ -30,7 +30,7 @@ public class User {
 	private LocalDate birthDate;
 	
 	@OneToMany(mappedBy = "user") // This would create user_id as the foreign key in the post table
-	@JsonIgnore // Ignore this in the response, just use it to represent relationships
+	@JsonIgnore // Ignore this in the response when returning a User object
 	private List<Post> posts;
 	
 	// Default constructor required for JPA
@@ -67,6 +67,15 @@ public class User {
 
 	public void setBirthDate(LocalDate birthDate) {
 		this.birthDate = birthDate;
+	}
+	
+
+	public List<Post> getPosts() {
+		return posts;
+	}
+
+	public void setPosts(List<Post> posts) {
+		this.posts = posts;
 	}
 
 	@Override
