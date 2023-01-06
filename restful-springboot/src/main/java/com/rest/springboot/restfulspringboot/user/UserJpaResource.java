@@ -122,4 +122,25 @@ public class UserJpaResource {
 		
 		return entityModel;
 	}
+	
+	// Create a post for a user
+	@PostMapping("/jpa/users/{id}/posts")
+	public ResponseEntity<Post> createPostForUser(@PathVariable int id, @Valid @RequestBody Post post) {
+		Optional<User> user = userRepository.findById(id);
+		
+		if (user.isEmpty()) {
+			throw new UserNotFoundException("User not found, id: " + id);
+		}
+		
+		post.setUser(user.get());
+		
+		Post savedPost = postRepository.save(post);
+		
+		// Return the URI of the post with 201 status code
+		URI location = ServletUriComponentsBuilder
+				.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(savedPost.getId()).toUri();
+		
+		return ResponseEntity.created(location).build(); // Build the response entity
+	}
 }
