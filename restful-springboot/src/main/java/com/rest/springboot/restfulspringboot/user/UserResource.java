@@ -3,6 +3,9 @@ package com.rest.springboot.restfulspringboot.user;
 import java.net.URI;
 import java.util.List;
 
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,14 +34,22 @@ public class UserResource {
 	
 	// Get one user with id
 	@GetMapping("/users/{id}")
-	public User retrieveUser(@PathVariable int id) {
+	// Use EntityModel to wrap a domain object and add links to it
+	public EntityModel<User> retrieveUser(@PathVariable int id) {
 		User user = service.findOne(id);
 		
 		if (user == null) {
 			throw new UserNotFoundException("User not found, id: " + id);
 		}
 		
-		return user;
+		EntityModel<User> entityModel = EntityModel.of(user);
+		
+		// Add link to the retrieveAllUsers method
+		// Builder to help build Link instances pointing to a Spring MVC controller
+		WebMvcLinkBuilder link = linkTo(methodOn(this.getClass()).retrieveAllUsers());
+		entityModel.add(link.withRel("all-users"));
+		
+		return entityModel;
 	}
 	
 	// Create a user
