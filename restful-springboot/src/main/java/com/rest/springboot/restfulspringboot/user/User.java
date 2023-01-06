@@ -1,13 +1,16 @@
 package com.rest.springboot.restfulspringboot.user;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity(name = "user_details") // Need to rename because user is a key word in h2
@@ -25,6 +28,10 @@ public class User {
 	@Past(message = "Birth data should be in the past")
 	// @JsonProperty("birth_date")
 	private LocalDate birthDate;
+	
+	@OneToMany(mappedBy = "user") // This would create user_id as the foreign key in the post table
+	@JsonIgnore // Ignore this in the response, just use it to represent relationships
+	private List<Post> posts;
 	
 	// Default constructor required for JPA
 	public User() {
