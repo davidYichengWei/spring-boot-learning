@@ -123,6 +123,31 @@ public class UserJpaResource {
 		return entityModel;
 	}
 	
+	// Get a post by combination of user_id and post_id
+	@GetMapping("/jpa/users/{user_id}/posts/{post_id}")
+	public EntityModel<Post> retrievePostForUserById(@PathVariable int user_id, @PathVariable int post_id) {
+		Optional<User> user = userRepository.findById(user_id);
+		
+		if (user.isEmpty()) {
+			throw new UserNotFoundException("User not found, id: " + user_id);
+		}
+		
+		Optional<Post> post = user.get().getPostById(post_id);
+		
+		if (post.isEmpty()) {
+			throw new UserNotFoundException("Post not found, id: " + post_id);
+		}
+		
+		EntityModel<Post> entityModel = EntityModel.of(post.get());
+		
+		// Add link to the retrieveAllUsers method
+		// Builder to help build Link instances pointing to a Spring MVC controller
+		WebMvcLinkBuilder link = linkTo(methodOn(this.getClass()).retrievePostsForUser(user_id));
+		entityModel.add(link.withRel("all-posts"));
+		
+		return entityModel;
+	}
+	
 	// Create a post for a user
 	@PostMapping("/jpa/users/{id}/posts")
 	public ResponseEntity<Post> createPostForUser(@PathVariable int id, @Valid @RequestBody Post post) {

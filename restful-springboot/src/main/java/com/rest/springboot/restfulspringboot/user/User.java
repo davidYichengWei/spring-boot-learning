@@ -2,6 +2,8 @@ package com.rest.springboot.restfulspringboot.user;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -76,6 +78,23 @@ public class User {
 
 	public void setPosts(List<Post> posts) {
 		this.posts = posts;
+	}
+	
+	public Optional<Post> getPostById(Integer id) {
+		Predicate<? super Post> predicate = post -> post.getId().equals(id);
+		
+		Optional<Post> post = this.posts.stream().filter(predicate).findFirst();
+		
+		return post;
+		
+//		for (Post post : posts) {
+//			System.out.println("Post id is: " + post.getId());
+//			if (post.getId().equals(id)) {
+//				System.out.println("returning post");
+//				return post;
+//			}
+//		}
+//		return null;
 	}
 
 	@Override
